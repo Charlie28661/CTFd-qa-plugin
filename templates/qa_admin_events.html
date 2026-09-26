@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ qa_asset('qa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>Class Q&amp;A</h1>
+	</div>
+</div>
+<div class="container qa">
+	<form id="qa-new-event" class="qa-card qa-new-event" autocomplete="off">
+		<h5>Create a new session</h5>
+		<input type="text" class="form-control" id="qa-event-title" maxlength="128" placeholder="Session title, e.g. Week 3: Web Security" required>
+		<input type="text" class="form-control" id="qa-event-description" placeholder="Description (optional)">
+		<button type="submit" class="btn btn-primary">Create</button>
+	</form>
+
+	{% if events %}
+	<table class="table qa-table">
+		<thead>
+			<tr>
+				<th>Session</th>
+				<th class="text-center">Questions</th>
+				<th class="text-center">Visible</th>
+				<th class="text-center">Accepting questions</th>
+				<th class="text-right">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for event in events %}
+			<tr data-event-id="{{ event.id }}">
+				<td>
+					<a href="{{ url_for('qa_admin.event_page', event_id=event.id) }}"><strong>{{ event.title }}</strong></a>
+					{% if event.description %}<div class="qa-muted">{{ event.description }}</div>{% endif %}
+				</td>
+				<td class="text-center">{{ question_counts.get(event.id, 0) }}</td>
+				<td class="text-center"><input type="checkbox" class="qa-toggle" data-field="is_active" {% if event.is_active %}checked{% endif %}></td>
+				<td class="text-center"><input type="checkbox" class="qa-toggle" data-field="qa_open" {% if event.qa_open %}checked{% endif %}></td>
+				<td class="text-right qa-nowrap">
+					<a class="btn btn-sm btn-outline-primary" href="{{ url_for('qa_admin.event_page', event_id=event.id) }}">Manage</a>
+					<a class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" href="{{ url_for('qa_admin.present_page', event_id=event.id) }}">Present</a>
+					<button type="button" class="btn btn-sm btn-outline-danger qa-delete-event">Delete</button>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+	<p class="qa-empty">No sessions yet. Create one to get started.</p>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ qa_asset('qa_common.js') }}"></script>
+<script defer src="{{ qa_asset('qa_admin.js') }}"></script>
+{% endblock %}

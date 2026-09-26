@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ qa_asset('qa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>Class Q&amp;A</h1>
+	</div>
+</div>
+<div class="container qa">
+	{% if events %}
+	<div class="qa-event-list">
+		{% for event in events %}
+		<a class="qa-event-link" href="{{ url_for('qa.event_page', event_id=event.id) }}">
+			<div class="qa-event-title">{{ event.title }}</div>
+			{% if event.description %}
+			<div class="qa-muted">{{ event.description }}</div>
+			{% endif %}
+			<div class="qa-event-meta">
+				{% if event.qa_open %}
+				<span class="qa-badge qa-badge-green">Open for questions</span>
+				{% else %}
+				<span class="qa-badge">Questions closed</span>
+				{% endif %}
+			</div>
+		</a>
+		{% endfor %}
+	</div>
+	{% else %}
+	<p class="qa-empty">There are no active sessions right now.</p>
+	{% endif %}
+</div>
+{% endblock %}

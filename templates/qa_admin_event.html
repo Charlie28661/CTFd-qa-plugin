@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ qa_asset('qa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>{{ event.title }}</h1>
+		<div class="qa-admin-links">
+			<a href="{{ url_for('qa_admin.events_page') }}">← All sessions</a>
+			<a target="_blank" rel="noopener" href="{{ url_for('qa.event_page', event_id=event.id) }}">Student page</a>
+			<a class="btn btn-primary btn-sm" target="_blank" rel="noopener" href="{{ url_for('qa_admin.present_page', event_id=event.id) }}">Open presentation mode</a>
+		</div>
+	</div>
+</div>
+
+<div class="container qa" id="qa-admin-event" data-event-id="{{ event.id }}">
+	<div class="qa-card qa-event-settings">
+		<label class="qa-check"><input type="checkbox" class="qa-event-toggle" data-field="is_active" {% if event.is_active %}checked{% endif %}> Visible to students</label>
+		<label class="qa-check"><input type="checkbox" class="qa-event-toggle" data-field="qa_open" {% if event.qa_open %}checked{% endif %}> Accept questions</label>
+	</div>
+
+	<div class="qa-admin-grid">
+		<section>
+			<div class="qa-list-header">
+				<h4>Questions</h4>
+				<div class="qa-sort" id="qa-q-filter">
+					<button type="button" class="qa-sort-btn active" data-filter="pending">Pending <span></span></button>
+					<button type="button" class="qa-sort-btn" data-filter="answered">Answered <span></span></button>
+					<button type="button" class="qa-sort-btn" data-filter="hidden">Hidden <span></span></button>
+					<button type="button" class="qa-sort-btn" data-filter="all">All <span></span></button>
+				</div>
+			</div>
+			<div id="qa-admin-questions" class="qa-questions"></div>
+		</section>
+
+		<section>
+			<h4>Polls</h4>
+			<form id="qa-new-poll" class="qa-card" autocomplete="off">
+				<input type="text" class="form-control" id="qa-poll-title" placeholder="Poll question" required>
+				<div id="qa-poll-options" class="qa-poll-option-inputs"></div>
+				<button type="button" class="qa-link-btn" id="qa-add-option">+ Add option</button>
+				<div class="qa-poll-flags">
+					<label class="qa-check"><input type="checkbox" id="qa-poll-multiple"> Multiple choice</label>
+					<label class="qa-check"><input type="checkbox" id="qa-poll-open" checked> Open immediately</label>
+					<label class="qa-check"><input type="checkbox" id="qa-poll-show"> Show results to students</label>
+				</div>
+				<button type="submit" class="btn btn-primary">Create poll</button>
+			</form>
+			<div id="qa-admin-polls"></div>
+		</section>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ qa_asset('qa_common.js') }}"></script>
+<script defer src="{{ qa_asset('qa_admin.js') }}"></script>
+{% endblock %}

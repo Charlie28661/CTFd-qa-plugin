@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ event.title }} · Present</title>
+	<link rel="stylesheet" href="{{ qa_asset('qa.css') }}">
+	<script type="text/javascript">
+		var init = {
+			'urlRoot': "{{ request.script_root }}",
+			'csrfNonce': "{{ Session.nonce }}"
+		}
+	</script>
+</head>
+<body class="qa-present" id="qa-present" data-event-id="{{ event.id }}">
+	<header class="sp-header">
+		<h1 class="sp-title">{{ event.title }}</h1>
+		<div class="sp-join">
+			<span>Ask questions &amp; vote at</span>
+			<strong id="sp-join-url">{{ url_for('qa.event_page', event_id=event.id) }}</strong>
+		</div>
+	</header>
+
+	<main class="sp-main">
+		<section id="sp-qa" class="sp-qa"></section>
+		<section id="sp-poll" class="sp-poll" hidden></section>
+	</main>
+
+	<div class="sp-undo" id="sp-undo" role="status" hidden></div>
+
+	<nav class="sp-controls" aria-label="Presentation controls">
+		<button type="button" data-mode="qa" title="Shortcut: Q">Q&amp;A</button>
+		<select id="sp-poll-select" title="Shortcut: P"></select>
+		<button type="button" id="sp-hide-results" title="Shortcut: H">Hide results</button>
+		<button type="button" id="sp-fullscreen" title="Shortcut: F">Fullscreen</button>
+	</nav>
+
+	<script defer src="{{ qa_asset('qa_common.js') }}"></script>
+	<script defer src="{{ qa_asset('qa_present.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ qa_asset('qa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1 id="qa-title">{{ event.title }}</h1>
+		{% if event.description %}
+		<p class="qa-muted" id="qa-description">{{ event.description }}</p>
+		{% endif %}
+	</div>
+</div>
+
+<div class="container qa" id="qa-app" data-event-id="{{ event.id }}" data-max-length="{{ max_length }}">
+	<div class="qa-tabs" role="tablist">
+		<button type="button" class="qa-tab active" data-tab="qa" role="tab">Q&amp;A</button>
+		<button type="button" class="qa-tab" data-tab="polls" role="tab">
+			Polls <span class="qa-tab-count" id="qa-poll-count" hidden></span>
+		</button>
+	</div>
+
+	<section class="qa-panel" data-panel="qa">
+		<form id="qa-ask" class="qa-card qa-ask" autocomplete="off">
+			<textarea id="qa-ask-content" class="form-control" rows="3"
+				maxlength="{{ max_length }}" placeholder="Type your question…"></textarea>
+			<div class="qa-ask-row">
+				<label class="qa-check">
+					<input type="checkbox" id="qa-ask-anonymous">
+					<span>Ask anonymously</span>
+				</label>
+				<span class="qa-muted qa-counter" id="qa-ask-counter">0 / {{ max_length }}</span>
+				<button type="submit" class="btn btn-primary" id="qa-ask-submit">Send</button>
+			</div>
+			<small class="qa-muted">When anonymous, other students won't see your name, but the instructor still can.</small>
+		</form>
+		<div class="qa-notice" id="qa-ask-closed" hidden>The instructor has closed questions. You can still upvote existing ones.</div>
+
+		<div class="qa-list-header">
+			<span id="qa-q-total" class="qa-muted"></span>
+			<div class="qa-sort">
+				<button type="button" class="qa-sort-btn active" data-sort="popular">Popular</button>
+				<button type="button" class="qa-sort-btn" data-sort="recent">Recent</button>
+			</div>
+		</div>
+		<div id="qa-questions" class="qa-questions"></div>
+	</section>
+
+	<section class="qa-panel" data-panel="polls" hidden>
+		<div id="qa-polls"></div>
+	</section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ qa_asset('qa_common.js') }}"></script>
+<script defer src="{{ qa_asset('qa_event.js') }}"></script>
+{% endblock %}
